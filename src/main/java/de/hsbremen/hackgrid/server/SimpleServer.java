@@ -18,6 +18,9 @@ import org.openmuc.openiec61850.BdaQuality.Validity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.hsbremen.hackgrid.model.ServerConfiguration;
+import de.hsbremen.hackgrid.utils.SimpleProperties;
+
 /**
  * This implementation is based on the SampleServer code from openmuc.
  * 
@@ -30,9 +33,9 @@ public class SimpleServer implements ServerEventListener{
 	
 	private static ServerSap serverSap = null;
 	
-	private final static int port = 10002;
-	
 	private static final String icdFileName = "sampleModel.icd";
+	
+	private static final String configFileName = "server.properties";
 	
 	public static void main(String[] args) throws IOException {
 		
@@ -43,8 +46,11 @@ public class SimpleServer implements ServerEventListener{
 			logger.warn("Error parsing SCL/ICD file: " + e.getMessage());
 		}
 		
+		SimpleProperties simpleProperties = new SimpleProperties();
+		ServerConfiguration serverConfiguration = simpleProperties.readServerProperites(configFileName);
+		
 		serverSap = serverSaps.get(0);
-		serverSap.setPort(port);
+		serverSap.setPort(serverConfiguration.getPort());
 		
 		Runtime.getRuntime().addShutdownHook(new Thread(){
 			@Override
@@ -61,6 +67,7 @@ public class SimpleServer implements ServerEventListener{
 		SimpleServer simpleServer = new SimpleServer();
 		
 		serverSap.startListening(simpleServer);
+		logger.info("Server is listening on port: " + serverConfiguration.getPort());
 		
 		BdaFloat32 totWMag = (BdaFloat32) serverModel.findModelNode("ied1lDevice1/MMXU1.TotW.mag.f", Fc.MX);
 		BdaQuality q = (BdaQuality) serverModel.findModelNode("ied1lDevice1/MMXU1.TotW.q", Fc.MX);
