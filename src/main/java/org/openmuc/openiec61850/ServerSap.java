@@ -339,6 +339,8 @@ public class ServerSap {
 	}
 
 	void connectionIndication(AcseAssociation acseAssociation, ByteBuffer psdu) {
+		
+		logger.info("AuthenticationParameter: " + acseAssociation.getAuthenticationParameter());
 
 		ServerAssociation association;
 		synchronized (associations) {

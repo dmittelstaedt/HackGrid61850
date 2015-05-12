@@ -54,7 +54,7 @@ public class SimpleClient implements ClientEventListener{
 		
 		logger.info("Trying to connect to server: " + clientConfiguration.getRemoteHost() + " using port: " + clientConfiguration.getRemotePort());
 		try {
-			clientAssociation = clientSap.associate(inetAddress, clientConfiguration.getRemotePort(), null, simpleClient);
+			clientAssociation = clientSap.associate(inetAddress, clientConfiguration.getRemotePort(), "Password", simpleClient);
 		} catch (IOException e) {
 			logger.error("Error connecting to server: " + e.getMessage());
 			return;
