@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.hsbremen.hackgrid.model.ClientConfiguration;
-import de.hsbremen.hackgrid.security.PasswordEncrypter;
+import de.hsbremen.hackgrid.security.SimplePasswordEncrypter;
 import de.hsbremen.hackgrid.utils.SimpleProperties;
 
 /**
@@ -53,7 +53,7 @@ public class SimpleClient implements ClientEventListener{
 		
 		ClientAssociation clientAssociation;
 		
-		PasswordEncrypter encrypter = new PasswordEncrypter();
+		SimplePasswordEncrypter encrypter = new SimplePasswordEncrypter();
 		
 		logger.info("Trying to connect to server: " + clientConfiguration.getRemoteHost() + " using port: " + clientConfiguration.getRemotePort());
 		try {

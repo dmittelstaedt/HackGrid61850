@@ -6,11 +6,11 @@ import org.junit.Test;
 
 public class PasswordEncrypterTest {
 	
-	private PasswordEncrypter encrypter;
+	private SimplePasswordEncrypter encrypter;
 	
 	@Before
 	public void setup() {
-		encrypter = new PasswordEncrypter();
+		encrypter = new SimplePasswordEncrypter();
 	}
 	
 	@Test

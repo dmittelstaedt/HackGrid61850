@@ -15,7 +15,7 @@ public class PasswordAuthenticator implements Authenticator {
 
 	@Override
 	public boolean accept(String authenticationParameter) {
-		PasswordEncrypter encrypter = new PasswordEncrypter();
+		SimplePasswordEncrypter encrypter = new SimplePasswordEncrypter();
 		return encrypter.checkPassword(password, authenticationParameter);
 	}
 

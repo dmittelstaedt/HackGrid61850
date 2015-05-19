@@ -44,12 +44,16 @@ import org.openmuc.openiec61850.internal.scl.LnSubDef;
 import org.openmuc.openiec61850.internal.scl.LnType;
 import org.openmuc.openiec61850.internal.scl.Sdo;
 import org.openmuc.openiec61850.internal.scl.TypeDefinitions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 final class SclParser {
+	
+	private static final Logger logger = LoggerFactory.getLogger(SclParser.class);
 
 	private TypeDefinitions typeDefinitions;
 	private final Map<String, DataSet> dataSetsMap = new HashMap<String, DataSet>();
@@ -194,6 +198,7 @@ final class SclParser {
 	private ServerModel createServerModel(Node serverXMLNode) throws SclParseException {
 
 		NodeList elements = serverXMLNode.getChildNodes();
+		logger.info("Length: " + elements.getLength());
 		List<LogicalDevice> logicalDevices = new ArrayList<LogicalDevice>(elements.getLength());
 
 		for (int i = 0; i < elements.getLength(); i++) {
