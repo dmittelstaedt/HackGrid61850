@@ -35,6 +35,8 @@ import org.openmuc.josistack.ServerAcseSap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.hsbremen.hackgrid.security.Authenticator;
+
 /**
  * The <code>ServerSap</code> class represents the IEC 61850 service access point for server applications. It
  * corresponds to the AccessPoint defined in the ICD/SCL file. A server application that is to listen for client
@@ -43,7 +45,7 @@ import org.slf4j.LoggerFactory;
  * <code>startListening</code> function is called to listen for client associations. Changing properties of a ServerSap
  * after starting to listen is not recommended and has unknown effects.
  */
-public class ServerSap {
+public final class ServerSap {
 
 	private final static Logger logger = LoggerFactory.getLogger(ServerSap.class);
 
@@ -65,6 +67,9 @@ public class ServerSap {
 	private int backlog = 0;
 	private InetAddress bindAddr = null;
 	private ServerSocketFactory serverSocketFactory = null;
+	
+	// the authenticator
+	private Authenticator authenticator;
 
 	Timer timer;
 
@@ -303,6 +308,24 @@ public class ServerSap {
 	public byte[] getServicesSupportedCalled() {
 		return servicesSupportedCalled;
 	}
+	
+	/**
+	 * Sets the authenticator.
+	 * 
+	 * @param authenticator the used authenticator
+	 */
+	public void setAuthenticator(Authenticator authenticator) {
+		this.authenticator = authenticator;
+	}
+	
+	/**
+	 * Gets the authenticator.
+	 * 
+	 * @return the authenticator
+	 */
+	public Authenticator getAuthenticator() {
+		return authenticator;
+	}
 
 	/**
 	 * Creates a server socket waiting on the configured port for incoming association requests.
@@ -339,12 +362,16 @@ public class ServerSap {
 	}
 
 	void connectionIndication(AcseAssociation acseAssociation, ByteBuffer psdu) {
-		
-		logger.info("AuthenticationParameter: " + acseAssociation.getAuthenticationParameter());
-
 		ServerAssociation association;
+		
+		boolean acceptingAuth = authenticator.accept(acseAssociation.getAuthenticationParameter());
+		if (!acceptingAuth) {
+			logger.warn("Association is closed because of a wrong authentication parameter.");
+		}
+		
 		synchronized (associations) {
-			if (listening) {
+			// a new association is added, if listening and acceptingAuth is true
+			if (listening && acceptingAuth) {
 				association = new ServerAssociation(this);
 				associations.add(association);
 			}

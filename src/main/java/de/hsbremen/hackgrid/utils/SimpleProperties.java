@@ -29,8 +29,9 @@ public class SimpleProperties {
 		List<String> propertyAttributes = new ArrayList<>(2);
 		propertyNames.add("remoteHost");
 		propertyNames.add("remotePort");
+		propertyNames.add("password");
 		propertyAttributes = loadProperties(propertyNames, fileName);
-		return new ClientConfiguration(propertyAttributes.get(0), Integer.parseInt(propertyAttributes.get(1)));
+		return new ClientConfiguration(propertyAttributes.get(0), Integer.parseInt(propertyAttributes.get(1)), propertyAttributes.get(2));
 	}
 	
 	public ServerConfiguration readServerProperites(String fileName) {
@@ -38,8 +39,9 @@ public class SimpleProperties {
 		List<String> propertyNames = new ArrayList<>(1);
 		List<String> propertyAttributes = new ArrayList<>(1);
 		propertyNames.add("port");
+		propertyNames.add("password");
 		propertyAttributes = loadProperties(propertyNames, fileName);
-		return new ServerConfiguration(Integer.parseInt(propertyAttributes.get(0)));
+		return new ServerConfiguration(Integer.parseInt(propertyAttributes.get(0)), propertyAttributes.get(1));
 	}
 	
 	private List<String> loadProperties(List<String> propertyNames, String fileName) {

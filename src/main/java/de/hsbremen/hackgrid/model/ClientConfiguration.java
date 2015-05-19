@@ -10,12 +10,14 @@ public class ClientConfiguration {
 	
 	private String remoteHost;
 	private int remotePort;
+	private String password;
 	
 	public ClientConfiguration() {}
 	
-	public ClientConfiguration(String remoteHoste, int remotePort) {
+	public ClientConfiguration(String remoteHoste, int remotePort, String password) {
 		this.remoteHost = remoteHoste;
 		this.remotePort = remotePort;
+		this.password = password;
 	}
 	
 	public String getRemoteHost() {
@@ -32,6 +34,14 @@ public class ClientConfiguration {
 	
 	public void setRemotePort(int remotePort) {
 		this.remotePort = remotePort;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 }
