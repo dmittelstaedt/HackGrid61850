@@ -111,7 +111,9 @@ public class SimpleServer implements ServerEventListener{
 
 	@Override
 	public List<ServiceError> write(List<BasicDataAttribute> bdas) {
-		// TODO Auto-generated method stub
+		for (BasicDataAttribute bda : bdas) {
+			logger.info("got a write request: " + bda);
+		}
 		return null;
 	}
 

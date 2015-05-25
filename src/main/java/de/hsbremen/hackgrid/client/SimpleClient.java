@@ -75,17 +75,28 @@ public class SimpleClient implements ClientEventListener{
 			return;
 		}
 		
+		// writing a variable
+		FcModelNode modCtlModel = (FcModelNode) serverModel.findModelNode("ied1lDevice1/CSWI1.Mod.ctlModel", Fc.CF);
+		clientAssociation.setDataValues(modCtlModel);
+		
 		// reading a variable
 		FcModelNode totW = (FcModelNode) serverModel.findModelNode("ied1lDevice1/MMXU1.TotW", Fc.MX);
 		BdaFloat32 totWmag = (BdaFloat32) totW.getChild("mag").getChild("f");
 		BdaTimestamp totWt = (BdaTimestamp) totW.getChild("t");
 		BdaQuality totWq = (BdaQuality) totW.getChild("q");
 		
-		clientAssociation.getDataValues(totW);
-		
-		logger.info("totWmag: " + totWmag.getFloat());
-		logger.info("totWt: " + totWt.getDate());
-		logger.info("totWq: " + totWq.getValidity());
+		while (true) {
+			clientAssociation.getDataValues(totW);
+			
+			logger.info("totWmag: " + totWmag.getFloat());
+			logger.info("totWt: " + totWt.getDate());
+			logger.info("totWq: " + totWq.getValidity());
+			
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+			}
+		}
 		
 	}
 
@@ -97,8 +108,7 @@ public class SimpleClient implements ClientEventListener{
 
 	@Override
 	public void associationClosed(IOException e) {
-		// TODO Auto-generated method stub
-		
+		logger.info("Association was closed");
 	}
 
 }
