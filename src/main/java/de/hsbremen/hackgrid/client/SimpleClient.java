@@ -76,7 +76,10 @@ public class SimpleClient implements ClientEventListener{
 		}
 		
 		// writing a variable
-		FcModelNode modCtlModel = (FcModelNode) serverModel.findModelNode("ied1lDevice1/CSWI1.Mod.ctlModel", Fc.CF);
+		FcModelNode modCtlModelMmxu = (FcModelNode) serverModel.findModelNode("ied1lDevice1/MMXU1.Mod.ctlModel", Fc.CF);
+		clientAssociation.setDataValues(modCtlModelMmxu);
+		
+		FcModelNode modCtlModel = (FcModelNode) serverModel.findModelNode("ied1lDevice1/CSWI1.Pos.ctlModel", Fc.CF);
 		clientAssociation.setDataValues(modCtlModel);
 		
 		// reading a variable
