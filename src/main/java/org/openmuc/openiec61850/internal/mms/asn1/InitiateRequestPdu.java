@@ -6,16 +6,15 @@ package org.openmuc.openiec61850.internal.mms.asn1;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.openmuc.jasn1.ber.BerByteArrayOutputStream;
-import org.openmuc.jasn1.ber.BerIdentifier;
-import org.openmuc.jasn1.ber.BerLength;
-import org.openmuc.jasn1.ber.types.BerInteger;
+import java.util.List;
+import java.util.LinkedList;
+import org.openmuc.jasn1.ber.*;
+import org.openmuc.jasn1.ber.types.*;
+import org.openmuc.jasn1.ber.types.string.*;
 
 public final class InitiateRequestPdu {
 
-	public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS,
-			BerIdentifier.CONSTRUCTED, 16);
+	public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS, BerIdentifier.CONSTRUCTED, 16);
 	protected BerIdentifier id;
 
 	public byte[] code = null;
@@ -38,9 +37,7 @@ public final class InitiateRequestPdu {
 		this.code = code;
 	}
 
-	public InitiateRequestPdu(BerInteger localDetailCalling, BerInteger proposedMaxServOutstandingCalling,
-			BerInteger proposedMaxServOutstandingCalled, BerInteger proposedDataStructureNestingLevel,
-			InitRequestDetail mmsInitRequestDetail) {
+	public InitiateRequestPdu(BerInteger localDetailCalling, BerInteger proposedMaxServOutstandingCalling, BerInteger proposedMaxServOutstandingCalled, BerInteger proposedDataStructureNestingLevel, InitRequestDetail mmsInitRequestDetail) {
 		id = identifier;
 		this.localDetailCalling = localDetailCalling;
 		this.proposedMaxServOutstandingCalling = proposedMaxServOutstandingCalling;
@@ -62,29 +59,24 @@ public final class InitiateRequestPdu {
 		else {
 			codeLength = 0;
 			codeLength += mmsInitRequestDetail.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 4))
-					.encode(berOStream);
-
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 4)).encode(berOStream);
+			
 			if (proposedDataStructureNestingLevel != null) {
 				codeLength += proposedDataStructureNestingLevel.encode(berOStream, false);
-				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 3))
-						.encode(berOStream);
+				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 3)).encode(berOStream);
 			}
-
+			
 			codeLength += proposedMaxServOutstandingCalled.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 2))
-					.encode(berOStream);
-
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 2)).encode(berOStream);
+			
 			codeLength += proposedMaxServOutstandingCalling.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 1))
-					.encode(berOStream);
-
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 1)).encode(berOStream);
+			
 			if (localDetailCalling != null) {
 				codeLength += localDetailCalling.encode(berOStream, false);
-				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 0))
-						.encode(berOStream);
+				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 0)).encode(berOStream);
 			}
-
+			
 			codeLength += BerLength.encodeLength(berOStream, codeLength);
 		}
 
@@ -99,6 +91,7 @@ public final class InitiateRequestPdu {
 	public int decode(InputStream iStream, boolean explicit) throws IOException {
 		int codeLength = 0;
 		int subCodeLength = 0;
+		int choiceDecodeLength = 0;
 		BerIdentifier berIdentifier = new BerIdentifier();
 		boolean decodedIdentifier = false;
 
@@ -188,3 +181,4 @@ public final class InitiateRequestPdu {
 		code = berOStream.getArray();
 	}
 }
+

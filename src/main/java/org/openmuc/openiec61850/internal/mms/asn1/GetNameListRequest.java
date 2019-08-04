@@ -6,12 +6,11 @@ package org.openmuc.openiec61850.internal.mms.asn1;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.openmuc.jasn1.ber.BerByteArrayOutputStream;
-import org.openmuc.jasn1.ber.BerIdentifier;
-import org.openmuc.jasn1.ber.BerLength;
-import org.openmuc.jasn1.ber.types.BerNull;
-import org.openmuc.jasn1.ber.types.string.BerVisibleString;
+import java.util.List;
+import java.util.LinkedList;
+import org.openmuc.jasn1.ber.*;
+import org.openmuc.jasn1.ber.types.*;
+import org.openmuc.jasn1.ber.types.string.*;
 
 public final class GetNameListRequest {
 
@@ -48,33 +47,31 @@ public final class GetNameListRequest {
 			int codeLength = 0;
 			if (aaSpecific != null) {
 				codeLength += aaSpecific.encode(berOStream, false);
-				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 2))
-						.encode(berOStream);
+				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 2)).encode(berOStream);
 				return codeLength;
 
 			}
-
+			
 			if (domainSpecific != null) {
 				codeLength += domainSpecific.encode(berOStream, false);
-				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 1))
-						.encode(berOStream);
+				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 1)).encode(berOStream);
 				return codeLength;
 
 			}
-
+			
 			if (vmdSpecific != null) {
 				codeLength += vmdSpecific.encode(berOStream, false);
-				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 0))
-						.encode(berOStream);
+				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 0)).encode(berOStream);
 				return codeLength;
 
 			}
-
+			
 			throw new IOException("Error encoding BerChoice: No item in choice was selected.");
 		}
 
 		public int decode(InputStream iStream, BerIdentifier berIdentifier) throws IOException {
 			int codeLength = 0;
+			int choiceDecodeLength = 0;
 			BerIdentifier passedIdentifier = berIdentifier;
 			if (berIdentifier == null) {
 				berIdentifier = new BerIdentifier();
@@ -111,8 +108,7 @@ public final class GetNameListRequest {
 		}
 	}
 
-	public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS,
-			BerIdentifier.CONSTRUCTED, 16);
+	public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS, BerIdentifier.CONSTRUCTED, 16);
 	protected BerIdentifier id;
 
 	public byte[] code = null;
@@ -154,22 +150,19 @@ public final class GetNameListRequest {
 
 			if (continueAfter != null) {
 				codeLength += continueAfter.encode(berOStream, false);
-				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 2))
-						.encode(berOStream);
+				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 2)).encode(berOStream);
 			}
-
+			
 			sublength = objectScope.encode(berOStream, true);
 			codeLength += sublength;
 			codeLength += BerLength.encodeLength(berOStream, sublength);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 1))
-					.encode(berOStream);
-
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 1)).encode(berOStream);
+			
 			sublength = objectClass.encode(berOStream, true);
 			codeLength += sublength;
 			codeLength += BerLength.encodeLength(berOStream, sublength);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 0))
-					.encode(berOStream);
-
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 0)).encode(berOStream);
+			
 			codeLength += BerLength.encodeLength(berOStream, codeLength);
 		}
 
@@ -257,3 +250,4 @@ public final class GetNameListRequest {
 		code = berOStream.getArray();
 	}
 }
+

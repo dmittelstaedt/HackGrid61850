@@ -6,20 +6,18 @@ package org.openmuc.openiec61850.internal.mms.asn1;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.openmuc.jasn1.ber.BerByteArrayOutputStream;
-import org.openmuc.jasn1.ber.BerIdentifier;
-import org.openmuc.jasn1.ber.BerLength;
-import org.openmuc.jasn1.ber.types.string.BerVisibleString;
+import java.util.List;
+import java.util.LinkedList;
+import org.openmuc.jasn1.ber.*;
+import org.openmuc.jasn1.ber.types.*;
+import org.openmuc.jasn1.ber.types.string.*;
 
 public final class ObjectName {
 
 	public byte[] code = null;
-
 	public final static class SubSeq_domain_specific {
 
-		public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS,
-				BerIdentifier.CONSTRUCTED, 16);
+		public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS, BerIdentifier.CONSTRUCTED, 16);
 		protected BerIdentifier id;
 
 		public byte[] code = null;
@@ -55,9 +53,9 @@ public final class ObjectName {
 			else {
 				codeLength = 0;
 				codeLength += itemId.encode(berOStream, true);
-
+				
 				codeLength += domainId.encode(berOStream, true);
-
+				
 				codeLength += BerLength.encodeLength(berOStream, codeLength);
 			}
 
@@ -72,6 +70,7 @@ public final class ObjectName {
 		public int decode(InputStream iStream, boolean explicit) throws IOException {
 			int codeLength = 0;
 			int subCodeLength = 0;
+			int choiceDecodeLength = 0;
 			BerIdentifier berIdentifier = new BerIdentifier();
 			boolean decodedIdentifier = false;
 
@@ -139,8 +138,7 @@ public final class ObjectName {
 		this.code = code;
 	}
 
-	public ObjectName(BerVisibleString vmd_specific, SubSeq_domain_specific domain_specific,
-			BerVisibleString aa_specific) {
+	public ObjectName(BerVisibleString vmd_specific, SubSeq_domain_specific domain_specific, BerVisibleString aa_specific) {
 		this.vmd_specific = vmd_specific;
 		this.domain_specific = domain_specific;
 		this.aa_specific = aa_specific;
@@ -157,33 +155,31 @@ public final class ObjectName {
 		int codeLength = 0;
 		if (aa_specific != null) {
 			codeLength += aa_specific.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 2))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 2)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (domain_specific != null) {
 			codeLength += domain_specific.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 1))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 1)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (vmd_specific != null) {
 			codeLength += vmd_specific.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 0))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 0)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		throw new IOException("Error encoding BerChoice: No item in choice was selected.");
 	}
 
 	public int decode(InputStream iStream, BerIdentifier berIdentifier) throws IOException {
 		int codeLength = 0;
+		int choiceDecodeLength = 0;
 		BerIdentifier passedIdentifier = berIdentifier;
 		if (berIdentifier == null) {
 			berIdentifier = new BerIdentifier();
@@ -219,3 +215,4 @@ public final class ObjectName {
 		code = berOStream.getArray();
 	}
 }
+

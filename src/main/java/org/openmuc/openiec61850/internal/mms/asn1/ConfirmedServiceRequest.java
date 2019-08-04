@@ -6,10 +6,11 @@ package org.openmuc.openiec61850.internal.mms.asn1;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.openmuc.jasn1.ber.BerByteArrayOutputStream;
-import org.openmuc.jasn1.ber.BerIdentifier;
-import org.openmuc.jasn1.ber.BerLength;
+import java.util.List;
+import java.util.LinkedList;
+import org.openmuc.jasn1.ber.*;
+import org.openmuc.jasn1.ber.types.*;
+import org.openmuc.jasn1.ber.types.string.*;
 
 public final class ConfirmedServiceRequest {
 
@@ -35,10 +36,7 @@ public final class ConfirmedServiceRequest {
 		this.code = code;
 	}
 
-	public ConfirmedServiceRequest(GetNameListRequest getNameList, ReadRequest read, WriteRequest write,
-			GetVariableAccessAttributesRequest getVariableAccessAttributes,
-			DefineNamedVariableListRequest defineNamedVariableList, ObjectName getNamedVariableListAttributes,
-			DeleteNamedVariableListRequest deleteNamedVariableList) {
+	public ConfirmedServiceRequest(GetNameListRequest getNameList, ReadRequest read, WriteRequest write, GetVariableAccessAttributesRequest getVariableAccessAttributes, DefineNamedVariableListRequest defineNamedVariableList, ObjectName getNamedVariableListAttributes, DeleteNamedVariableListRequest deleteNamedVariableList) {
 		this.getNameList = getNameList;
 		this.read = read;
 		this.write = write;
@@ -61,69 +59,63 @@ public final class ConfirmedServiceRequest {
 
 		if (deleteNamedVariableList != null) {
 			codeLength += deleteNamedVariableList.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 13))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 13)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (getNamedVariableListAttributes != null) {
 			sublength = getNamedVariableListAttributes.encode(berOStream, true);
 			codeLength += sublength;
 			codeLength += BerLength.encodeLength(berOStream, sublength);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 12))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 12)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (defineNamedVariableList != null) {
 			codeLength += defineNamedVariableList.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 11))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 11)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (getVariableAccessAttributes != null) {
 			sublength = getVariableAccessAttributes.encode(berOStream, true);
 			codeLength += sublength;
 			codeLength += BerLength.encodeLength(berOStream, sublength);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 6))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 6)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (write != null) {
 			codeLength += write.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 5))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 5)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (read != null) {
 			codeLength += read.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 4))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 4)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (getNameList != null) {
 			codeLength += getNameList.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 1))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 1)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		throw new IOException("Error encoding BerChoice: No item in choice was selected.");
 	}
 
 	public int decode(InputStream iStream, BerIdentifier berIdentifier) throws IOException {
 		int codeLength = 0;
+		int choiceDecodeLength = 0;
 		BerIdentifier passedIdentifier = berIdentifier;
 		if (berIdentifier == null) {
 			berIdentifier = new BerIdentifier();
@@ -185,3 +177,4 @@ public final class ConfirmedServiceRequest {
 		code = berOStream.getArray();
 	}
 }
+

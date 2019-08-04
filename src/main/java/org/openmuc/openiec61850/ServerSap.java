@@ -70,6 +70,8 @@ public final class ServerSap {
 	
 	// the authenticator
 	private Authenticator authenticator;
+	
+	private int delay;
 
 	Timer timer;
 
@@ -325,6 +327,14 @@ public final class ServerSap {
 	 */
 	public Authenticator getAuthenticator() {
 		return authenticator;
+	}
+	
+	public int getDelay() {
+		return delay;
+	}
+
+	public void setDelay(int delay) {
+		this.delay = delay;
 	}
 
 	/**

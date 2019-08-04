@@ -6,17 +6,15 @@ package org.openmuc.openiec61850.internal.mms.asn1;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.LinkedList;
 import java.util.List;
-
-import org.openmuc.jasn1.ber.BerByteArrayOutputStream;
-import org.openmuc.jasn1.ber.BerIdentifier;
-import org.openmuc.jasn1.ber.BerLength;
+import java.util.LinkedList;
+import org.openmuc.jasn1.ber.*;
+import org.openmuc.jasn1.ber.types.*;
+import org.openmuc.jasn1.ber.types.string.*;
 
 public final class DataSequence {
 
-	public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS,
-			BerIdentifier.CONSTRUCTED, 16);
+	public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS, BerIdentifier.CONSTRUCTED, 16);
 	protected BerIdentifier id;
 
 	public byte[] code = null;
@@ -87,10 +85,10 @@ public final class DataSequence {
 
 		return codeLength;
 	}
-
 	public void encodeAndSave(int encodingSizeGuess) throws IOException {
 		BerByteArrayOutputStream berOStream = new BerByteArrayOutputStream(encodingSizeGuess);
 		encode(berOStream, false);
 		code = berOStream.getArray();
 	}
 }
+

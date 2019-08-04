@@ -39,6 +39,7 @@ import org.openmuc.jasn1.ber.types.BerBitString;
 import org.openmuc.jasn1.ber.types.BerBoolean;
 import org.openmuc.jasn1.ber.types.BerInteger;
 import org.openmuc.jasn1.ber.types.BerNull;
+import org.openmuc.jasn1.ber.types.BerOctetString;
 import org.openmuc.jasn1.ber.types.string.BerVisibleString;
 import org.openmuc.josistack.AcseAssociation;
 import org.openmuc.josistack.ByteBufferInputStream;
@@ -80,6 +81,8 @@ import org.openmuc.openiec61850.internal.mms.asn1.WriteRequest.SubSeqOf_listOfDa
 import org.openmuc.openiec61850.internal.mms.asn1.WriteResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import de.hsbremen.hackgrid.utils.SimpleTimestamp;
 
 /**
  * Represents an association/connection to an IEC 61850 MMS server. An instance of <code>ClientAssociation</code> is
@@ -894,7 +897,10 @@ public final class ClientAssociation {
 		VariableAccessSpecification varAccessSpec = new VariableAccessSpecification(new SubSeqOf_listOfVariable(
 				listOfVariables), null);
 
-		ReadRequest readRequest = new ReadRequest(null, varAccessSpec);
+		SimpleTimestamp simpleTimestamp = new SimpleTimestamp();
+		simpleTimestamp.setCurrentTime();
+		
+		ReadRequest readRequest = new ReadRequest(null, varAccessSpec, new BerOctetString(simpleTimestamp.getValue()));
 
 		return new ConfirmedServiceRequest(null, readRequest, null, null, null, null, null);
 	}
@@ -1211,7 +1217,11 @@ public final class ClientAssociation {
 	private ConfirmedServiceRequest constructGetDataSetValuesRequest(DataSet dataSet) throws ServiceError {
 
 		VariableAccessSpecification varAccSpec = new VariableAccessSpecification(null, dataSet.getMmsObjectName());
-		ReadRequest getDataSetValuesRequest = new ReadRequest(new BerBoolean(true), varAccSpec);
+		
+		SimpleTimestamp simpleTimestamp = new SimpleTimestamp();
+		simpleTimestamp.setCurrentTime();
+		
+		ReadRequest getDataSetValuesRequest = new ReadRequest(new BerBoolean(true), varAccSpec, new BerOctetString(simpleTimestamp.getValue()));
 		return new ConfirmedServiceRequest(null, getDataSetValuesRequest, null, null, null, null, null);
 
 	}

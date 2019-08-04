@@ -6,24 +6,20 @@ package org.openmuc.openiec61850.internal.mms.asn1;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.openmuc.jasn1.ber.BerByteArrayOutputStream;
-import org.openmuc.jasn1.ber.BerIdentifier;
-import org.openmuc.jasn1.ber.BerLength;
-import org.openmuc.jasn1.ber.types.BerInteger;
-import org.openmuc.jasn1.ber.types.BerNull;
-import org.openmuc.jasn1.ber.types.string.BerVisibleString;
+import java.util.List;
+import java.util.LinkedList;
+import org.openmuc.jasn1.ber.*;
+import org.openmuc.jasn1.ber.types.*;
+import org.openmuc.jasn1.ber.types.string.*;
 
 public final class AlternateAccessSelection {
 
 	public byte[] code = null;
-
 	public final static class SubSeq_selectAlternateAccess {
 
 		public final static class SubSeq_indexRange {
 
-			public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS,
-					BerIdentifier.CONSTRUCTED, 16);
+			public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS, BerIdentifier.CONSTRUCTED, 16);
 			protected BerIdentifier id;
 
 			public byte[] code = null;
@@ -59,13 +55,11 @@ public final class AlternateAccessSelection {
 				else {
 					codeLength = 0;
 					codeLength += numberOfElements.encode(berOStream, false);
-					codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 1))
-							.encode(berOStream);
-
+					codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 1)).encode(berOStream);
+					
 					codeLength += lowIndex.encode(berOStream, false);
-					codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 0))
-							.encode(berOStream);
-
+					codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 0)).encode(berOStream);
+					
 					codeLength += BerLength.encodeLength(berOStream, codeLength);
 				}
 
@@ -80,6 +74,7 @@ public final class AlternateAccessSelection {
 			public int decode(InputStream iStream, boolean explicit) throws IOException {
 				int codeLength = 0;
 				int subCodeLength = 0;
+				int choiceDecodeLength = 0;
 				BerIdentifier berIdentifier = new BerIdentifier();
 				boolean decodedIdentifier = false;
 
@@ -134,8 +129,7 @@ public final class AlternateAccessSelection {
 			}
 		}
 
-		public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS,
-				BerIdentifier.CONSTRUCTED, 16);
+		public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS, BerIdentifier.CONSTRUCTED, 16);
 		protected BerIdentifier id;
 
 		public byte[] code = null;
@@ -158,8 +152,7 @@ public final class AlternateAccessSelection {
 			this.code = code;
 		}
 
-		public SubSeq_selectAlternateAccess(BerVisibleString component, BerInteger index, SubSeq_indexRange indexRange,
-				BerNull allElements, AlternateAccess alternateAccess) {
+		public SubSeq_selectAlternateAccess(BerVisibleString component, BerInteger index, SubSeq_indexRange indexRange, BerNull allElements, AlternateAccess alternateAccess) {
 			id = identifier;
 			this.component = component;
 			this.index = index;
@@ -181,23 +174,19 @@ public final class AlternateAccessSelection {
 			else {
 				codeLength = 0;
 				codeLength += alternateAccess.encode(berOStream, true);
-
+				
 				codeLength += allElements.encode(berOStream, false);
-				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 3))
-						.encode(berOStream);
-
+				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 3)).encode(berOStream);
+				
 				codeLength += indexRange.encode(berOStream, false);
-				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 2))
-						.encode(berOStream);
-
+				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 2)).encode(berOStream);
+				
 				codeLength += index.encode(berOStream, false);
-				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 1))
-						.encode(berOStream);
-
+				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 1)).encode(berOStream);
+				
 				codeLength += component.encode(berOStream, false);
-				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 0))
-						.encode(berOStream);
-
+				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 0)).encode(berOStream);
+				
 				codeLength += BerLength.encodeLength(berOStream, codeLength);
 			}
 
@@ -212,6 +201,7 @@ public final class AlternateAccessSelection {
 		public int decode(InputStream iStream, boolean explicit) throws IOException {
 			int codeLength = 0;
 			int subCodeLength = 0;
+			int choiceDecodeLength = 0;
 			BerIdentifier berIdentifier = new BerIdentifier();
 			boolean decodedIdentifier = false;
 
@@ -325,8 +315,7 @@ public final class AlternateAccessSelection {
 		this.code = code;
 	}
 
-	public AlternateAccessSelection(SubSeq_selectAlternateAccess selectAlternateAccess, BerVisibleString component,
-			BerInteger index, IndexRangeSeq indexRange, BerNull allElements) {
+	public AlternateAccessSelection(SubSeq_selectAlternateAccess selectAlternateAccess, BerVisibleString component, BerInteger index, IndexRangeSeq indexRange, BerNull allElements) {
 		this.selectAlternateAccess = selectAlternateAccess;
 		this.component = component;
 		this.index = index;
@@ -345,49 +334,45 @@ public final class AlternateAccessSelection {
 		int codeLength = 0;
 		if (allElements != null) {
 			codeLength += allElements.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 4))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 4)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (indexRange != null) {
 			codeLength += indexRange.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 3))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 3)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (index != null) {
 			codeLength += index.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 2))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 2)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (component != null) {
 			codeLength += component.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 1))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 1)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (selectAlternateAccess != null) {
 			codeLength += selectAlternateAccess.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 0))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 0)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		throw new IOException("Error encoding BerChoice: No item in choice was selected.");
 	}
 
 	public int decode(InputStream iStream, BerIdentifier berIdentifier) throws IOException {
 		int codeLength = 0;
+		int choiceDecodeLength = 0;
 		BerIdentifier passedIdentifier = berIdentifier;
 		if (berIdentifier == null) {
 			berIdentifier = new BerIdentifier();
@@ -435,3 +420,4 @@ public final class AlternateAccessSelection {
 		code = berOStream.getArray();
 	}
 }
+

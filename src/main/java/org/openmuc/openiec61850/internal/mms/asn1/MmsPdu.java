@@ -6,10 +6,11 @@ package org.openmuc.openiec61850.internal.mms.asn1;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.openmuc.jasn1.ber.BerByteArrayOutputStream;
-import org.openmuc.jasn1.ber.BerIdentifier;
-import org.openmuc.jasn1.ber.types.BerNull;
+import java.util.List;
+import java.util.LinkedList;
+import org.openmuc.jasn1.ber.*;
+import org.openmuc.jasn1.ber.types.*;
+import org.openmuc.jasn1.ber.types.string.*;
 
 public final class MmsPdu {
 
@@ -39,10 +40,7 @@ public final class MmsPdu {
 		this.code = code;
 	}
 
-	public MmsPdu(ConfirmedRequestPdu confirmedRequestPdu, ConfirmedResponsePdu confirmedResponsePdu,
-			ConfirmedErrorPdu confirmedErrorPdu, UnconfirmedPdu unconfirmedPdu, RejectPdu rejectPdu,
-			InitiateRequestPdu initiateRequestPdu, InitiateResponsePdu initiateResponsePdu,
-			ServiceError initiateErrorPdu, BerNull conclude_RequestPDU) {
+	public MmsPdu(ConfirmedRequestPdu confirmedRequestPdu, ConfirmedResponsePdu confirmedResponsePdu, ConfirmedErrorPdu confirmedErrorPdu, UnconfirmedPdu unconfirmedPdu, RejectPdu rejectPdu, InitiateRequestPdu initiateRequestPdu, InitiateResponsePdu initiateResponsePdu, ServiceError initiateErrorPdu, BerNull conclude_RequestPDU) {
 		this.confirmedRequestPdu = confirmedRequestPdu;
 		this.confirmedResponsePdu = confirmedResponsePdu;
 		this.confirmedErrorPdu = confirmedErrorPdu;
@@ -65,81 +63,73 @@ public final class MmsPdu {
 		int codeLength = 0;
 		if (conclude_RequestPDU != null) {
 			codeLength += conclude_RequestPDU.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 11))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 11)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (initiateErrorPdu != null) {
 			codeLength += initiateErrorPdu.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 10))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 10)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (initiateResponsePdu != null) {
 			codeLength += initiateResponsePdu.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 9))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 9)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (initiateRequestPdu != null) {
 			codeLength += initiateRequestPdu.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 8))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 8)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (rejectPdu != null) {
 			codeLength += rejectPdu.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 4))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 4)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (unconfirmedPdu != null) {
 			codeLength += unconfirmedPdu.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 3))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 3)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (confirmedErrorPdu != null) {
 			codeLength += confirmedErrorPdu.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 2))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 2)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (confirmedResponsePdu != null) {
 			codeLength += confirmedResponsePdu.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 1))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 1)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (confirmedRequestPdu != null) {
 			codeLength += confirmedRequestPdu.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 0))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 0)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		throw new IOException("Error encoding BerChoice: No item in choice was selected.");
 	}
 
 	public int decode(InputStream iStream, BerIdentifier berIdentifier) throws IOException {
 		int codeLength = 0;
+		int choiceDecodeLength = 0;
 		BerIdentifier passedIdentifier = berIdentifier;
 		if (berIdentifier == null) {
 			berIdentifier = new BerIdentifier();
@@ -211,3 +201,4 @@ public final class MmsPdu {
 		code = berOStream.getArray();
 	}
 }
+

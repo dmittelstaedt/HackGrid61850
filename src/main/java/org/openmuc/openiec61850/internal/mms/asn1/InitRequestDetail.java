@@ -6,17 +6,15 @@ package org.openmuc.openiec61850.internal.mms.asn1;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.openmuc.jasn1.ber.BerByteArrayOutputStream;
-import org.openmuc.jasn1.ber.BerIdentifier;
-import org.openmuc.jasn1.ber.BerLength;
-import org.openmuc.jasn1.ber.types.BerBitString;
-import org.openmuc.jasn1.ber.types.BerInteger;
+import java.util.List;
+import java.util.LinkedList;
+import org.openmuc.jasn1.ber.*;
+import org.openmuc.jasn1.ber.types.*;
+import org.openmuc.jasn1.ber.types.string.*;
 
 public final class InitRequestDetail {
 
-	public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS,
-			BerIdentifier.CONSTRUCTED, 16);
+	public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS, BerIdentifier.CONSTRUCTED, 16);
 	protected BerIdentifier id;
 
 	public byte[] code = null;
@@ -35,8 +33,7 @@ public final class InitRequestDetail {
 		this.code = code;
 	}
 
-	public InitRequestDetail(BerInteger proposedVersionNumber, BerBitString proposedParameterCBB,
-			BerBitString servicesSupportedCalling) {
+	public InitRequestDetail(BerInteger proposedVersionNumber, BerBitString proposedParameterCBB, BerBitString servicesSupportedCalling) {
 		id = identifier;
 		this.proposedVersionNumber = proposedVersionNumber;
 		this.proposedParameterCBB = proposedParameterCBB;
@@ -56,17 +53,14 @@ public final class InitRequestDetail {
 		else {
 			codeLength = 0;
 			codeLength += servicesSupportedCalling.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 2))
-					.encode(berOStream);
-
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 2)).encode(berOStream);
+			
 			codeLength += proposedParameterCBB.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 1))
-					.encode(berOStream);
-
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 1)).encode(berOStream);
+			
 			codeLength += proposedVersionNumber.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 0))
-					.encode(berOStream);
-
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 0)).encode(berOStream);
+			
 			codeLength += BerLength.encodeLength(berOStream, codeLength);
 		}
 
@@ -81,6 +75,7 @@ public final class InitRequestDetail {
 	public int decode(InputStream iStream, boolean explicit) throws IOException {
 		int codeLength = 0;
 		int subCodeLength = 0;
+		int choiceDecodeLength = 0;
 		BerIdentifier berIdentifier = new BerIdentifier();
 		boolean decodedIdentifier = false;
 
@@ -148,3 +143,4 @@ public final class InitRequestDetail {
 		code = berOStream.getArray();
 	}
 }
+

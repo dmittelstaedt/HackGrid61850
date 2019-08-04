@@ -6,22 +6,23 @@ package org.openmuc.openiec61850.internal.mms.asn1;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.openmuc.jasn1.ber.BerByteArrayOutputStream;
-import org.openmuc.jasn1.ber.BerIdentifier;
-import org.openmuc.jasn1.ber.BerLength;
-import org.openmuc.jasn1.ber.types.BerBoolean;
+import java.util.List;
+import java.util.LinkedList;
+import org.openmuc.jasn1.ber.*;
+import org.openmuc.jasn1.ber.types.*;
+import org.openmuc.jasn1.ber.types.string.*;
 
 public final class ReadRequest {
 
-	public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS,
-			BerIdentifier.CONSTRUCTED, 16);
+	public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS, BerIdentifier.CONSTRUCTED, 16);
 	protected BerIdentifier id;
 
 	public byte[] code = null;
 	public BerBoolean specificationWithResult = null;
 
 	public VariableAccessSpecification variableAccessSpecification = null;
+
+	public BerOctetString mytimestamp = null;
 
 	public ReadRequest() {
 		id = identifier;
@@ -32,10 +33,11 @@ public final class ReadRequest {
 		this.code = code;
 	}
 
-	public ReadRequest(BerBoolean specificationWithResult, VariableAccessSpecification variableAccessSpecification) {
+	public ReadRequest(BerBoolean specificationWithResult, VariableAccessSpecification variableAccessSpecification, BerOctetString mytimestamp) {
 		id = identifier;
 		this.specificationWithResult = specificationWithResult;
 		this.variableAccessSpecification = variableAccessSpecification;
+		this.mytimestamp = mytimestamp;
 	}
 
 	public int encode(BerByteArrayOutputStream berOStream, boolean explicit) throws IOException {
@@ -52,18 +54,21 @@ public final class ReadRequest {
 			codeLength = 0;
 			int sublength;
 
+			sublength = mytimestamp.encode(berOStream, true);
+			codeLength += sublength;
+			codeLength += BerLength.encodeLength(berOStream, sublength);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 2)).encode(berOStream);
+			
 			sublength = variableAccessSpecification.encode(berOStream, true);
 			codeLength += sublength;
 			codeLength += BerLength.encodeLength(berOStream, sublength);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 1))
-					.encode(berOStream);
-
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 1)).encode(berOStream);
+			
 			if (specificationWithResult != null) {
 				codeLength += specificationWithResult.encode(berOStream, false);
-				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 0))
-						.encode(berOStream);
+				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 0)).encode(berOStream);
 			}
-
+			
 			codeLength += BerLength.encodeLength(berOStream, codeLength);
 		}
 
@@ -118,6 +123,21 @@ public final class ReadRequest {
 				throw new IOException("Identifier does not macht required sequence element identifer.");
 			}
 		}
+		if (subCodeLength < length.val) {
+			if (decodedIdentifier == false) {
+				subCodeLength += berIdentifier.decode(iStream);
+				decodedIdentifier = true;
+			}
+			if (berIdentifier.equals(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 2)) {
+				subCodeLength += new BerLength().decode(iStream);
+				mytimestamp = new BerOctetString();
+				subCodeLength += mytimestamp.decode(iStream, true);
+				decodedIdentifier = false;
+			}
+			else {
+				throw new IOException("Identifier does not macht required sequence element identifer.");
+			}
+		}
 		if (subCodeLength != length.val) {
 			throw new IOException("Decoded sequence has wrong length tag");
 
@@ -133,3 +153,4 @@ public final class ReadRequest {
 		code = berOStream.getArray();
 	}
 }
+

@@ -6,16 +6,15 @@ package org.openmuc.openiec61850.internal.mms.asn1;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.openmuc.jasn1.ber.BerByteArrayOutputStream;
-import org.openmuc.jasn1.ber.BerIdentifier;
-import org.openmuc.jasn1.ber.BerLength;
-import org.openmuc.jasn1.ber.types.BerInteger;
+import java.util.List;
+import java.util.LinkedList;
+import org.openmuc.jasn1.ber.*;
+import org.openmuc.jasn1.ber.types.*;
+import org.openmuc.jasn1.ber.types.string.*;
 
 public final class ConfirmedErrorPdu {
 
-	public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS,
-			BerIdentifier.CONSTRUCTED, 16);
+	public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS, BerIdentifier.CONSTRUCTED, 16);
 	protected BerIdentifier id;
 
 	public byte[] code = null;
@@ -54,19 +53,16 @@ public final class ConfirmedErrorPdu {
 		else {
 			codeLength = 0;
 			codeLength += serviceError.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 2))
-					.encode(berOStream);
-
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 2)).encode(berOStream);
+			
 			if (modifierPosition != null) {
 				codeLength += modifierPosition.encode(berOStream, false);
-				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 1))
-						.encode(berOStream);
+				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 1)).encode(berOStream);
 			}
-
+			
 			codeLength += invokeID.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 0))
-					.encode(berOStream);
-
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 0)).encode(berOStream);
+			
 			codeLength += BerLength.encodeLength(berOStream, codeLength);
 		}
 
@@ -81,6 +77,7 @@ public final class ConfirmedErrorPdu {
 	public int decode(InputStream iStream, boolean explicit) throws IOException {
 		int codeLength = 0;
 		int subCodeLength = 0;
+		int choiceDecodeLength = 0;
 		BerIdentifier berIdentifier = new BerIdentifier();
 		boolean decodedIdentifier = false;
 
@@ -145,3 +142,4 @@ public final class ConfirmedErrorPdu {
 		code = berOStream.getArray();
 	}
 }
+

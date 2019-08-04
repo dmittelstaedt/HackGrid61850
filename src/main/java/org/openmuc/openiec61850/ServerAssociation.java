@@ -83,6 +83,8 @@ import org.openmuc.openiec61850.internal.mms.asn1.WriteResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.hsbremen.hackgrid.utils.SimpleTimestamp;
+
 final class ServerAssociation {
 
 	private final static Logger logger = LoggerFactory.getLogger(ServerAssociation.class);
@@ -765,6 +767,15 @@ final class ServerAssociation {
 	}
 
 	private ReadResponse handleGetDataValuesRequest(ReadRequest mmsReadRequest) throws ServiceError {
+		
+		SimpleTimestamp simpleTimestamp = new SimpleTimestamp();
+		simpleTimestamp.setValue(mmsReadRequest.mytimestamp.octetString);
+		
+		long diff = (System.currentTimeMillis() - simpleTimestamp.getDate().getTime())/1000;
+		
+		if (diff > serverSap.getDelay()) {
+			logger.warn("Delay is greater than " + serverSap.getDelay() + " Seconds. Replay Attack is possible.");
+		}
 
 		VariableAccessSpecification variableAccessSpecification = mmsReadRequest.variableAccessSpecification;
 

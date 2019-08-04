@@ -6,21 +6,17 @@ package org.openmuc.openiec61850.internal.mms.asn1;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.LinkedList;
 import java.util.List;
-
-import org.openmuc.jasn1.ber.BerByteArrayOutputStream;
-import org.openmuc.jasn1.ber.BerIdentifier;
-import org.openmuc.jasn1.ber.BerLength;
-import org.openmuc.jasn1.ber.types.BerBoolean;
-import org.openmuc.jasn1.ber.types.string.BerVisibleString;
+import java.util.LinkedList;
+import org.openmuc.jasn1.ber.*;
+import org.openmuc.jasn1.ber.types.*;
+import org.openmuc.jasn1.ber.types.string.*;
 
 public final class GetNameListResponse {
 
 	public final static class SubSeqOf_listOfIdentifier {
 
-		public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS,
-				BerIdentifier.CONSTRUCTED, 16);
+		public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS, BerIdentifier.CONSTRUCTED, 16);
 		protected BerIdentifier id;
 
 		public byte[] code = null;
@@ -91,7 +87,6 @@ public final class GetNameListResponse {
 
 			return codeLength;
 		}
-
 		public void encodeAndSave(int encodingSizeGuess) throws IOException {
 			BerByteArrayOutputStream berOStream = new BerByteArrayOutputStream(encodingSizeGuess);
 			encode(berOStream, false);
@@ -99,8 +94,7 @@ public final class GetNameListResponse {
 		}
 	}
 
-	public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS,
-			BerIdentifier.CONSTRUCTED, 16);
+	public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS, BerIdentifier.CONSTRUCTED, 16);
 	protected BerIdentifier id;
 
 	public byte[] code = null;
@@ -137,14 +131,12 @@ public final class GetNameListResponse {
 			codeLength = 0;
 			if (moreFollows != null) {
 				codeLength += moreFollows.encode(berOStream, false);
-				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 1))
-						.encode(berOStream);
+				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 1)).encode(berOStream);
 			}
-
+			
 			codeLength += listOfIdentifier.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 0))
-					.encode(berOStream);
-
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 0)).encode(berOStream);
+			
 			codeLength += BerLength.encodeLength(berOStream, codeLength);
 		}
 
@@ -159,6 +151,7 @@ public final class GetNameListResponse {
 	public int decode(InputStream iStream, boolean explicit) throws IOException {
 		int codeLength = 0;
 		int subCodeLength = 0;
+		int choiceDecodeLength = 0;
 		BerIdentifier berIdentifier = new BerIdentifier();
 		boolean decodedIdentifier = false;
 
@@ -209,3 +202,4 @@ public final class GetNameListResponse {
 		code = berOStream.getArray();
 	}
 }
+

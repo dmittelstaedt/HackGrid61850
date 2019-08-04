@@ -40,8 +40,9 @@ public class SimpleProperties {
 		List<String> propertyAttributes = new ArrayList<String>(1);
 		propertyNames.add("port");
 		propertyNames.add("password");
+		propertyNames.add("delay");
 		propertyAttributes = loadProperties(propertyNames, fileName);
-		return new ServerConfiguration(Integer.parseInt(propertyAttributes.get(0)), propertyAttributes.get(1));
+		return new ServerConfiguration(Integer.parseInt(propertyAttributes.get(0)), propertyAttributes.get(1), Integer.parseInt(propertyAttributes.get(2)));
 	}
 	
 	private List<String> loadProperties(List<String> propertyNames, String fileName) {

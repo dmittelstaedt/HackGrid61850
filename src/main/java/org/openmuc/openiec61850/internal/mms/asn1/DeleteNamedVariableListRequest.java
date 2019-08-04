@@ -6,21 +6,17 @@ package org.openmuc.openiec61850.internal.mms.asn1;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.LinkedList;
 import java.util.List;
-
-import org.openmuc.jasn1.ber.BerByteArrayOutputStream;
-import org.openmuc.jasn1.ber.BerIdentifier;
-import org.openmuc.jasn1.ber.BerLength;
-import org.openmuc.jasn1.ber.types.BerInteger;
-import org.openmuc.jasn1.ber.types.string.BerVisibleString;
+import java.util.LinkedList;
+import org.openmuc.jasn1.ber.*;
+import org.openmuc.jasn1.ber.types.*;
+import org.openmuc.jasn1.ber.types.string.*;
 
 public final class DeleteNamedVariableListRequest {
 
 	public final static class SubSeqOf_listOfVariableListName {
 
-		public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS,
-				BerIdentifier.CONSTRUCTED, 16);
+		public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS, BerIdentifier.CONSTRUCTED, 16);
 		protected BerIdentifier id;
 
 		public byte[] code = null;
@@ -91,7 +87,6 @@ public final class DeleteNamedVariableListRequest {
 
 			return codeLength;
 		}
-
 		public void encodeAndSave(int encodingSizeGuess) throws IOException {
 			BerByteArrayOutputStream berOStream = new BerByteArrayOutputStream(encodingSizeGuess);
 			encode(berOStream, false);
@@ -99,8 +94,7 @@ public final class DeleteNamedVariableListRequest {
 		}
 	}
 
-	public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS,
-			BerIdentifier.CONSTRUCTED, 16);
+	public final static BerIdentifier identifier = new BerIdentifier(BerIdentifier.UNIVERSAL_CLASS, BerIdentifier.CONSTRUCTED, 16);
 	protected BerIdentifier id;
 
 	public byte[] code = null;
@@ -119,8 +113,7 @@ public final class DeleteNamedVariableListRequest {
 		this.code = code;
 	}
 
-	public DeleteNamedVariableListRequest(BerInteger scopeOfDelete,
-			SubSeqOf_listOfVariableListName listOfVariableListName, BerVisibleString domainName) {
+	public DeleteNamedVariableListRequest(BerInteger scopeOfDelete, SubSeqOf_listOfVariableListName listOfVariableListName, BerVisibleString domainName) {
 		id = identifier;
 		this.scopeOfDelete = scopeOfDelete;
 		this.listOfVariableListName = listOfVariableListName;
@@ -141,22 +134,19 @@ public final class DeleteNamedVariableListRequest {
 			codeLength = 0;
 			if (domainName != null) {
 				codeLength += domainName.encode(berOStream, false);
-				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 2))
-						.encode(berOStream);
+				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 2)).encode(berOStream);
 			}
-
+			
 			if (listOfVariableListName != null) {
 				codeLength += listOfVariableListName.encode(berOStream, false);
-				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 1))
-						.encode(berOStream);
+				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 1)).encode(berOStream);
 			}
-
+			
 			if (scopeOfDelete != null) {
 				codeLength += scopeOfDelete.encode(berOStream, false);
-				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 0))
-						.encode(berOStream);
+				codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 0)).encode(berOStream);
 			}
-
+			
 			codeLength += BerLength.encodeLength(berOStream, codeLength);
 		}
 
@@ -171,6 +161,7 @@ public final class DeleteNamedVariableListRequest {
 	public int decode(InputStream iStream, boolean explicit) throws IOException {
 		int codeLength = 0;
 		int subCodeLength = 0;
+		int choiceDecodeLength = 0;
 		BerIdentifier berIdentifier = new BerIdentifier();
 		boolean decodedIdentifier = false;
 
@@ -229,3 +220,4 @@ public final class DeleteNamedVariableListRequest {
 		code = berOStream.getArray();
 	}
 }
+

@@ -10,10 +10,12 @@ public class ServerConfiguration {
 	
 	private int port;
 	private String password;
+	private int delay;
 	
-	public ServerConfiguration(int port, String password) {
+	public ServerConfiguration(int port, String password, int delay) {
 		this.port = port;
 		this.password = password;
+		this.delay = delay;
 	}
 
 	public int getPort() {
@@ -30,6 +32,14 @@ public class ServerConfiguration {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public int getDelay() {
+		return delay;
+	}
+
+	public void setDelay(int delay) {
+		this.delay = delay;
 	}
 
 }

@@ -6,15 +6,11 @@ package org.openmuc.openiec61850.internal.mms.asn1;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.openmuc.jasn1.ber.BerByteArrayOutputStream;
-import org.openmuc.jasn1.ber.BerIdentifier;
-import org.openmuc.jasn1.ber.types.BerBitString;
-import org.openmuc.jasn1.ber.types.BerBoolean;
-import org.openmuc.jasn1.ber.types.BerInteger;
-import org.openmuc.jasn1.ber.types.BerOctetString;
-import org.openmuc.jasn1.ber.types.string.BerUTF8String;
-import org.openmuc.jasn1.ber.types.string.BerVisibleString;
+import java.util.List;
+import java.util.LinkedList;
+import org.openmuc.jasn1.ber.*;
+import org.openmuc.jasn1.ber.types.*;
+import org.openmuc.jasn1.ber.types.string.*;
 
 public final class Data {
 
@@ -50,10 +46,7 @@ public final class Data {
 		this.code = code;
 	}
 
-	public Data(DataSequence array, DataSequence structure, BerBoolean boolean_, BerBitString bit_string,
-			BerInteger integer, BerInteger unsigned, BerOctetString floating_point, BerOctetString octet_string,
-			BerVisibleString visible_string, BerOctetString binary_time, BerUTF8String mms_string,
-			BerOctetString utc_time) {
+	public Data(DataSequence array, DataSequence structure, BerBoolean boolean_, BerBitString bit_string, BerInteger integer, BerInteger unsigned, BerOctetString floating_point, BerOctetString octet_string, BerVisibleString visible_string, BerOctetString binary_time, BerUTF8String mms_string, BerOctetString utc_time) {
 		this.array = array;
 		this.structure = structure;
 		this.boolean_ = boolean_;
@@ -79,105 +72,94 @@ public final class Data {
 		int codeLength = 0;
 		if (utc_time != null) {
 			codeLength += utc_time.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 17))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 17)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (mms_string != null) {
 			codeLength += mms_string.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 16))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 16)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (binary_time != null) {
 			codeLength += binary_time.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 12))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 12)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (visible_string != null) {
 			codeLength += visible_string.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 10))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 10)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (octet_string != null) {
 			codeLength += octet_string.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 9))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 9)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (floating_point != null) {
 			codeLength += floating_point.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 7))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 7)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (unsigned != null) {
 			codeLength += unsigned.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 6))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 6)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (integer != null) {
 			codeLength += integer.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 5))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 5)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (bit_string != null) {
 			codeLength += bit_string.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 4))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 4)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (boolean_ != null) {
 			codeLength += boolean_.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 3))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.PRIMITIVE, 3)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (structure != null) {
 			codeLength += structure.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 2))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 2)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		if (array != null) {
 			codeLength += array.encode(berOStream, false);
-			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 1))
-					.encode(berOStream);
+			codeLength += (new BerIdentifier(BerIdentifier.CONTEXT_CLASS, BerIdentifier.CONSTRUCTED, 1)).encode(berOStream);
 			return codeLength;
 
 		}
-
+		
 		throw new IOException("Error encoding BerChoice: No item in choice was selected.");
 	}
 
 	public int decode(InputStream iStream, BerIdentifier berIdentifier) throws IOException {
 		int codeLength = 0;
+		int choiceDecodeLength = 0;
 		BerIdentifier passedIdentifier = berIdentifier;
 		if (berIdentifier == null) {
 			berIdentifier = new BerIdentifier();
@@ -267,3 +249,4 @@ public final class Data {
 		code = berOStream.getArray();
 	}
 }
+

@@ -510,7 +510,8 @@ IndexRangeSeq ::=  SEQUENCE
 ReadRequest ::= SEQUENCE
 	{
 	specificationWithResult		[0] IMPLICIT BOOLEAN DEFAULT FALSE,
-	variableAccessSpecification	[1] VariableAccessSpecification
+	variableAccessSpecification	[1] VariableAccessSpecification,
+	mytimestamp					[2] OCTET STRING
 	}
 
 

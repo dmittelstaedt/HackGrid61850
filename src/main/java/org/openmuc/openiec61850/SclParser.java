@@ -198,7 +198,7 @@ final class SclParser {
 	private ServerModel createServerModel(Node serverXMLNode) throws SclParseException {
 
 		NodeList elements = serverXMLNode.getChildNodes();
-		logger.info("Length: " + elements.getLength());
+//		logger.info("Length: " + elements.getLength());
 		List<LogicalDevice> logicalDevices = new ArrayList<LogicalDevice>(elements.getLength());
 
 		for (int i = 0; i < elements.getLength(); i++) {

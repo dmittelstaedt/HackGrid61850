@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import de.hsbremen.hackgrid.model.ServerConfiguration;
 import de.hsbremen.hackgrid.security.PasswordAuthenticator;
+import de.hsbremen.hackgrid.security.SimpleAuthenticator;
 import de.hsbremen.hackgrid.utils.SimpleProperties;
 
 /**
@@ -52,7 +53,9 @@ public class SimpleServer implements ServerEventListener{
 		
 		serverSap = serverSaps.get(0);
 		serverSap.setPort(serverConfiguration.getPort());
+//		serverSap.setAuthenticator(new SimpleAuthenticator());
 		serverSap.setAuthenticator(new PasswordAuthenticator(serverConfiguration.getPassword()));
+		serverSap.setDelay(serverConfiguration.getDelay());
 		
 		Runtime.getRuntime().addShutdownHook(new Thread(){
 			@Override
